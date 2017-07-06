@@ -13,8 +13,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
+  console.log('req.body:' , req.body)
   Playlist.create(req.body)
-  .then(playlist => res.status(201).json(playlist))
+  .then(playlist => res.status(201).json(playlist) )
   .catch(next);
 });
 
