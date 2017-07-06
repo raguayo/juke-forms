@@ -27,9 +27,13 @@ export default class Main extends Component {
     .catch(console.error)
   }
 
-  updatePlaylist(newPlaylist){
-    console.log(newPlaylist)
-    this.setState(prevState => ( { playlists: [...prevState.playlists, newPlaylist] } ));
+  updatePlaylist(value) {
+    axios.post('/api/playlists', { name: value })
+      .then(res => res.data)
+      .then(newPlaylist => {
+        this.setState(prevState => ( { playlists: [...prevState.playlists, newPlaylist] } ));
+      })
+      .catch(err => console.error(err));
   }
 
   render () {
