@@ -15,16 +15,19 @@ export default class Main extends Component {
     super(props)
 
     this.state = {
-      playlists: []
+      playlists: [],
+      availableSongs: []
     }
 
     this.updatePlaylist = this.updatePlaylist.bind(this);
   }
 
   componentDidMount() {
-    axios.get('api/playlists')
-    .then(res => res.data)
-    .then(playlists => this.setState({playlists: playlists}))
+    const playlistPromise = axios.get('api/playlists').then(res => res.data)
+    const songsPromise = axios.get('api/songs').then(res => res.data)
+
+    Promise.all([playlistPromise, songsPromise])
+    .then(([playlists, availableSongs]) => this.setState({playlists, availableSongs}))
     .catch(console.error)
   }
 
@@ -36,6 +39,8 @@ export default class Main extends Component {
       })
       .catch(err => console.error(err));
   }
+
+
 
   render () {
     return (
@@ -53,7 +58,9 @@ export default class Main extends Component {
               <Route path="/newPlaylist" render={
                 () => { return <NewPlaylist updatePlaylist={this.updatePlaylist} /> }
                 } />
-              <Route path="/playlists/:playlistId" component={Playlist} />
+              <Route path="/playlists/:playlistId" render={
+                (props) =>  { return <Playlist match={props.match} availableSongs={this.state.availableSongs} /> }
+              } />
               <Route component={StatefulAlbums} />
             </Switch>
           </div>
