@@ -7,6 +7,7 @@ import SingleArtist from './SingleArtist';
 import Sidebar from './Sidebar';
 import Player from './Player';
 import NewPlaylist from './NewPlaylist';
+import Playlist from './Playlist';
 import axios from 'axios'
 
 export default class Main extends Component {
@@ -52,6 +53,7 @@ export default class Main extends Component {
               <Route path="/newPlaylist" render={
                 () => { return <NewPlaylist updatePlaylist={this.updatePlaylist} /> }
                 } />
+              <Route path="/playlists/:playlistId" component={Playlist} />
               <Route component={StatefulAlbums} />
             </Switch>
           </div>

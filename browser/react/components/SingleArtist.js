@@ -28,6 +28,22 @@ class SingleArtist extends React.Component {
       });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.state.artist.id !== nextProps.match.params.artistId) {
+    const artistId = nextProps.match.params.artistId;
+    const mainPath = `/api/artists/${artistId}`;
+    const paths = [mainPath, `${mainPath}/albums`, `${mainPath}/songs`];
+    Bluebird
+      .map(paths, path => axios.get(path))
+      .map(res => res.data)
+      .spread((artist, albums, songs) => {
+        artist.albums = albums;
+        artist.songs = songs;
+        this.setState({ artist });
+      });
+    }
+  }
+
   render () {
 
     const artist = this.state.artist;
